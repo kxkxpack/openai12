@@ -1,7 +1,7 @@
 # openai12
 openai余额查询 并导出结果txt或excel
 
-支持任意格式查询
+支持任意格式查询,都只返回查询key的结果
 
 使用 apikey 查询 openai apikey 余额，可查询 120$ 的key，目前大多数key应该都是用于调用chatgpt的。
 
