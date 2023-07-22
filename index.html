@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html>
 
@@ -343,7 +345,7 @@
 <body>
   <header>
     <h1 class="text-3xl font-semibold text-center mb-8 text-gradient">OpenAI API 信息查询</h1>
-    <p class=" text-center  text-gradient" style="text-align: center;">7月22日更新后，需使用sess码进行查询。使用key只能查询总额度、绑卡、GPT4和组织ID。</p>
+    <p class=" text-center  text-gradient" style="text-align: center;">7月22日更新后，查询剩余额度需要使用sess码。使用key只能查询总额度、绑卡、GPT4和组织ID。</p>
 
   </header>
 
@@ -361,7 +363,7 @@
       <p style="display: inline-block; font-size: smaller;">支持自定义线路，官网线路需要魔法</p>
     </div>
     <select id="api-url-select" style="width:49%;">
-      <option value="https://api.openai.com">【官网线路】api.openai.com</option>
+      <option value="https://api.kfai.cc">【本站反代】</option>
       <option value="custom">【已前置https】自定义 ...</option>
     </select>
 
@@ -512,16 +514,23 @@
       } else {
         apiUrl = apiUrlSelect.value;
       }
+      
+      
+let skKeys = apiKeyInput.value.match(/sk-[A-Za-z0-9]{48}/g);
+let sessKeys = apiKeyInput.value.match(/sess-[A-Za-z0-9]{40}/g);
 
-     let apiKeys = apiKeyInput.value.match(/sk-[A-Za-z0-9]{10,48}/g);
+// 检查 skKeys 和 sessKeys 是否为 null，如果是，则赋值为空数组 []
+skKeys = skKeys || [];
+sessKeys = sessKeys || [];
 
-      if (apiKeys.length === 0) {
-        alert("未匹配到 API-KEY，请检查输入内容");
-        return;
-      }
+let apiKeys = skKeys.concat(sessKeys);
 
-      alert("成功匹配到 API Key，确认后开始查询：" + apiKeys);
+if (apiKeys.length === 0) {
+  alert("未匹配到 API-KEY，请检查输入内容");
+  return;
+}
 
+alert("成功匹配到 API Key，确认后开始查询：" + apiKeys);
       let tableBody = document.querySelector("#result-table tbody");
       for (let i = 0; i < apiKeys.length; i++) {
         let apiKey = apiKeys[i].trim();
