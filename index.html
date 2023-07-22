@@ -1,14 +1,12 @@
-
 <!DOCTYPE html>
 <html>
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
-
-  <title>nby Chat-查询OpenAIAPI余额</title>
-  <meta name="description" content="批量快速查询OPENAI的余额，支持可视化展现已用比例、额度、已用量、未用量、是否GPT-4、是否绑卡">
+<script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+  <title>OpenAIAPI 信息查询</title>
+  <meta name="description" content="批量快速查询OPENAI的余额，支持可视化展现已用比例、额度、已用量、未用量、是否GPT-4、是否绑卡、组织ID">
   <style>
     :root {
       --color-primary: #1E3B7A;
@@ -344,7 +342,9 @@
 
 <body>
   <header>
-    <h1 class="text-3xl font-semibold text-center mb-8 text-gradient">查询 OpenAI API 余额</h1>
+    <h1 class="text-3xl font-semibold text-center mb-8 text-gradient">OpenAI API 信息查询</h1>
+    <p class=" text-center  text-gradient" style="text-align: center;">7月22日更新后，需使用sess码进行查询。使用key只能查询总额度、绑卡、GPT4和组织ID。</p>
+    <a href="oapi.html" style="text-align: center;color:antiquewhite;text-decoration: none;font-weight: 700;"><p>Oapi的余额查询</p></a>
   </header>
 
   <div class="query">
@@ -352,7 +352,7 @@
       <h2 style="display: inline-block;">输入 API KEY</h2>
       <p style="display: inline-block; font-size: smaller;">本站不保存 KEY 信息，查询后请自行保存</p>
     </div>
-    <textarea id="api-key-input" placeholder="请输入 API-KEY，必须包含 sk-,多个可直接粘贴"></textarea></p>
+    <textarea id="api-key-input" placeholder="请输入 API-KEY或sessID，多个可直接粘贴"></textarea></p>
     <!-- API链接选择框 -->
     <div class="api-url-container"></div>
     <!-- API链接选择 -->
@@ -360,31 +360,31 @@
       <h2 style="display: inline-block;">选择查询线路</h2>
       <p style="display: inline-block; font-size: smaller;">支持自定义线路，官网线路需要魔法</p>
     </div>
-    <select id="api-url-select">
-      <option value="https://api.nby.net">【官网线路】api.nby.net</option>
+    <select id="api-url-select" style="width:49%;">
+      <option value="https://api.openai.com">【官网线路】api.openai.com</option>
       <option value="custom">【已前置https】自定义 ...</option>
     </select>
 
     <!-- 自定义API链接输入框 -->
-    <input type="text" id="custom-url-input" placeholder="输入自定义API，默认使用 https 协议" />
+    <input type="text" id="custom-url-input" placeholder="输入自定义API，填域名即可，无需https://" style="width:45%;"/>
   </div>
   <button :class="{ loading }" :disabled="loading" onclick="sendRequest()">查询</button> </p>
   </div>
-  <button onclick="exportToExcel()">导出Excel</button>
+ <button onclick="exportToExcel()">导出Excel</button>
 <button onclick="exportToTxt()">导出TXT</button>
-
-  <h2 id="result-head" style="display: none;">查询结果</h2>
-  <table id="result-table" style="display: none;">
+  <h2 id="result-head" style="visibility:hidden">查询结果</h2>
+  <table id="result-table" style="visibility:hidden">
     <thead>
       <tr>
         <th style="width:35px">序号</th>
-        <th>API KEY</th>
+        <th >API KEY</th>
         <th style="width: 50px">总额度</th>
         <th style="width: 50px">已使用</th>
         <th style="width: 50px">剩余量</th>
         <th style="width: 100px">已用比例</th>
         <th style="width: 90px">到期时间</th>
         <th style="width: 50px">GPT-4</th>
+        <th style="width: 50px">32K</th>
         <th style="width: 50px">绑卡</th>
         <th>组织ID</th>
       </tr>
@@ -392,13 +392,13 @@
     <tbody></tbody>
   </table>
   <footer>
-    <a href="javascript:history.go(-1)">返回来源页面</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <a href="https://wgpt.shop/">AI Store</a>
+    <a href="https://kjq.cc" style="color: white;" target="_blank">钱二哥地址</a> 
+
 
   </footer>
 
 
-  <script>
+ <script>
     let queriedApiKeys = [];
     let serialNumber = 1;
 
@@ -437,6 +437,7 @@
         const gpt4CheckResponse = await fetch(gpt4Check, { headers });
         const gpt4CheckData = await gpt4CheckResponse.json();
         let GPT4CheckResult = Array.isArray(gpt4CheckData.data) && gpt4CheckData.data.some(item => item.id.includes('gpt-4')) ? '✅' : '❌';
+        let GPT432kCheckResult = Array.isArray(gpt4CheckData.data) && gpt4CheckData.data.some(item => item.id.includes('gpt-4-32k')) ? '✅' : '❌';
         let isSubscrible = subscriptionData.plan.id.includes('payg') ? '✅' : '❌';
 
         if (totalAmount > 20) {
@@ -466,10 +467,10 @@
           setid = setiddata.data[0].id;
         }
 
-        return [totalAmount, totalUsage, remaining, formattedDate, GPT4CheckResult, isSubscrible, setid];
+        return [totalAmount, totalUsage, remaining, formattedDate, GPT4CheckResult, GPT432kCheckResult,isSubscrible, setid];
       } catch (error) {
         console.error(error);
-        return ["Error", null, null, null, null, null, null];
+        return ["Error", null, null, null, null,null, null, null];
       }
     }
 
@@ -487,8 +488,8 @@
       let customUrlInput = document.getElementById("custom-url-input");
       let table = document.getElementById("result-table");
       let h2 = document.getElementById("result-head");
-      h2.style.display = "block";
-      table.style.display = "table";
+      h2.style.visibility = "visible";
+      table.style.visibility = "visible";
 
       if (apiKeyInput.value.trim() === "") {
         alert("请填写API KEY");
@@ -512,9 +513,9 @@
         apiUrl = apiUrlSelect.value;
       }
 
-      let apiKeys = apiKeyInput.value.match(/sk-[A-Za-z0-9]{10,48}/g);
+      let apiKeys = apiKeyInput.value.split(/[,\s，\n]+/);
 
-      if (apiKeys === null || apiKeys.length === 0) {
+      if (apiKeys.length === 0) {
         alert("未匹配到 API-KEY，请检查输入内容");
         return;
       }
@@ -593,12 +594,16 @@
             GPT4CheckResult.textContent = data[4];
             row.appendChild(GPT4CheckResult);
 
+            let GPT432kCheckResult = document.createElement("td");
+            GPT432kCheckResult.textContent = data[5];
+            row.appendChild(GPT432kCheckResult);
+
             let isSubscribe = document.createElement("td");
-            isSubscribe.textContent = data[5];
+            isSubscribe.textContent = data[6];
             row.appendChild(isSubscribe);
 
             let setidCell = document.createElement("td");
-            setidCell.textContent = data[6]; // 使用data[6]来获取组织ID
+            setidCell.textContent = data[7]; 
             row.appendChild(setidCell);
           }
 
@@ -608,6 +613,8 @@
             queriedApiKeys = [];
           }
           serialNumber++; // 增加序列号
+          h2.style.display = 'block';
+          table.style.display = 'table';
 
         }).catch((error) => {
           console.error(error);
@@ -637,7 +644,20 @@
       }
     }
 
-    function exportToExcel() {
+    let apiUrlSelect = document.getElementById("api-url-select");
+    let customUrlInput = document.getElementById("custom-url-input");
+
+    apiUrlSelect.addEventListener("change", function () {
+      if (apiUrlSelect.value === "custom") {
+        customUrlInput.style.display = "inline-block";
+        customUrlInput.style.marginTop = "5px";
+      } else {
+        customUrlInput.style.display = "none";
+      }
+    });
+
+
+   function exportToExcel() {
       // 获取表格
       let table = document.getElementById("result-table");
 
