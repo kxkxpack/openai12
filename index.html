@@ -513,7 +513,7 @@
         apiUrl = apiUrlSelect.value;
       }
 
-      let apiKeys = apiKeyInput.value.split(/[,\s，\n]+/);
+     let apiKeys = apiKeyInput.value.match(/sk-[A-Za-z0-9]{10,48}/g);
 
       if (apiKeys.length === 0) {
         alert("未匹配到 API-KEY，请检查输入内容");
