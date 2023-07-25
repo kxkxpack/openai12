@@ -418,7 +418,7 @@
         "Content-Type": "application/json"
       };
       const gpt4Check = `${apiUrl}/v1/models`;
-      const urlSubscription = `${apiUrl}/v1/dashboard/billing/subscription`;
+      const urlSubscription = `${apiUrl}/dashboard/billing/subscription`;
       let urlUsage = `${apiUrl}/dashboard/billing/usage?end_date=${formatDate(endDate)}&start_date=${formatDate(startDate)}`;
       const urlsetid = apiUrl + '/organizations'; //查组织id
 
