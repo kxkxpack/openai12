@@ -419,7 +419,7 @@
       };
       const gpt4Check = `${apiUrl}/v1/models`;
       const urlSubscription = `${apiUrl}/v1/dashboard/billing/subscription`;
-      let urlUsage = `${apiUrl}/v1/dashboard/billing/usage?start_date=${formatDate(startDate)}&end_date=${formatDate(endDate)}`;
+      let urlUsage = `${apiUrl}/v1/dashboard/billing/usage?end_date=${formatDate(endDate)}&start_date=${formatDate(startDate)}`;
       const urlsetid = apiUrl + '/v1/organizations'; //查组织id
 
       try {
