@@ -418,9 +418,9 @@
         "Content-Type": "application/json"
       };
       const gpt4Check = `${apiUrl}/v1/models`;
-      const urlSubscription = `${apiUrl}/dashboard/billing/subscription`;
-      let urlUsage = `${apiUrl}/dashboard/billing/usage?end_date=${formatDate(endDate)}&start_date=${formatDate(startDate)}`;
-      const urlsetid = apiUrl + '/organizations'; //查组织id
+      const urlSubscription = `${apiUrl}/v1/dashboard/billing/subscription`;
+      let urlUsage = `${apiUrl}/v1/dashboard/billing/usage?start_date=${formatDate(startDate)}&end_date=${formatDate(endDate)}`;
+      const urlsetid = apiUrl + '/v1/organizations'; //查组织id
 
       try {
         // 获取API限额
@@ -443,8 +443,8 @@
         let isSubscrible = subscriptionData.plan.id.includes('payg') ? '✅' : '❌';
 
         if (totalAmount > 20) {
-          startDate = subDate;              
-          urlUsage = `${apiUrl}/dashboard/billing/usage?end_date=${formatDate(endDate)}&start_date=${formatDate(startDate)}`;
+          startDate = subDate;
+          urlUsage = `${apiUrl}/v1/dashboard/billing/usage?start_date=${formatDate(startDate)}&end_date=${formatDate(endDate)}`;
           response = await fetch(urlUsage, { headers });
           const usageData = await response.json();
         }
