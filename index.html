@@ -723,7 +723,6 @@ alert("成功匹配到 API Key，确认后开始查询：" + apiKeys);
             let isSubscriptionValid = document.createElement("td");
             isSubscriptionValid.textContent = data[4] === '✅' ? '✅' : '❌'; // 使用 GPT35CheckResult 的值进行判断
             // 添加自定义类名
-            isSubscriptionValid.classList.add('emoji');
             row.appendChild(isSubscriptionValid);
 
 
