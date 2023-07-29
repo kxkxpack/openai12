@@ -721,7 +721,7 @@ alert("成功匹配到 API Key，确认后开始查询：" + apiKeys);
 
             // 是否有效列
             let isSubscriptionValid = document.createElement("td");
-            isSubscriptionValid.textContent = data[4] === '✅' ? '有效' : '失效'; // 使用 GPT35CheckResult 的值进行判断
+            isSubscriptionValid.textContent = data[4] === '✅' ? '✅' : 'X'; // 使用 GPT35CheckResult 的值进行判断
             // 添加自定义类名
             isSubscriptionValid.classList.add('emoji');
             row.appendChild(isSubscriptionValid);
