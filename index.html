@@ -18,12 +18,11 @@
     }
 
     body {
-        background-color: #c17895;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+      background: url('https://cdn-img.czl.net/2023/05/23/pjbczr.webp') no-repeat center center fixed;
+      /* 自定义背景图 */
+      background-size: cover;
       width: 90%;
-      max-width: 1280px;
+      max-width: 1400px;
       margin-left: auto;
       margin-right: auto;
       padding-left: 2rem;
@@ -266,7 +265,7 @@
       border-collapse: collapse;
       width: 100%;
       margin-top: 20px;
-      font-size: 14px;
+      font-size: 10px;
       border-radius: 5px;
       border: none;
       overflow: hidden;
@@ -278,7 +277,7 @@
       color: #ffffff;
       font-weight: 400;
       height: 20px;
-      padding: 10px 25px;
+      padding: 10px 5px;
       text-align: left;
       /* border: 1px solid #dcdcdc; */
     }
@@ -287,7 +286,7 @@
     #result-table td {
       height: 20px;
       text-align: left;
-      padding: 10px 25px;
+      padding: 10px 5px;
       /* border: 1px solid #d3d3d3; */
     }
 
@@ -316,8 +315,8 @@
     /* 下面的代码定义了结果表格数据单元格的样式 */
     #result-table .status-error {
       height: 20px;
-      text-align: center;
-      padding: 10px 25px;
+      text-align: left;
+      padding: 10px 5px;
       /* border: 1px solid #dcdcdc; */
     }
 
@@ -336,6 +335,24 @@
       height: 100px;
       /* border: 1px solid #999; */
       background-color: #fff;
+    }
+
+    .emoji {
+      font-size: 30px;
+      /* 调整为适当的大小 */
+    }
+
+    button.loading::before {
+      content: "";
+      display: inline-block;
+      margin-right: .5rem;
+      border: 2px solid #fff;
+      border-top-color: transparent;
+      border-bottom-color: transparent;
+      border-radius: 50%;
+      width: .75rem;
+      height: .75rem;
+      animation: rotate .5s linear infinite;
     }
   </style>
 </head>
