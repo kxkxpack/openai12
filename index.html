@@ -373,6 +373,8 @@
   </div>
   <button :class="{ loading }" :disabled="loading" onclick="sendRequest()">查询</button> </p>
   </div>
+   <button onclick="if (!window.__cfRLUnblockHandlers) return false; exportToExcel()" data-cf-modified-be13a96006ed458cd992c942-="">导出Excel</button>
+<button onclick="if (!window.__cfRLUnblockHandlers) return false; exportToTxt()" data-cf-modified-be13a96006ed458cd992c942-="">导出TXT</button>
   <h2 id="result-head" style="visibility:hidden">查询结果</h2>
   <table id="result-table" style="visibility:hidden">
     <thead>
@@ -396,8 +398,7 @@
     <tbody></tbody>
   </table>
   <footer>
-    <a href="https://chat.czl.net" style="color: white;" target="_blank">CZLChat</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <a href="https://oapi.czl.net" style="color: white;" target="_blank">CZLOapi</a>
+   
 
   </footer>
 
@@ -702,7 +703,7 @@ alert("成功匹配到 API Key，确认后开始查询：" + apiKeys);
 
             // 是否有效列
             let isSubscriptionValid = document.createElement("td");
-            isSubscriptionValid.textContent = data[4] === '✅' ? '🥰' : '🥶'; // 使用 GPT35CheckResult 的值进行判断
+            isSubscriptionValid.textContent = data[4] === '✅' ? '有效' : '失效'; // 使用 GPT35CheckResult 的值进行判断
             // 添加自定义类名
             isSubscriptionValid.classList.add('emoji');
             row.appendChild(isSubscriptionValid);
