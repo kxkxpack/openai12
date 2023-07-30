@@ -388,9 +388,10 @@
   </div>
   <button :class="{ loading }" :disabled="loading" onclick="sendRequest()">查询</button> </p>
   </div>
+  
+  <h2 id="result-head" style="visibility:hidden">查询结果</h2>
    <button onclick="if (!window.__cfRLUnblockHandlers) return false; exportToExcel()" data-cf-modified-be13a96006ed458cd992c942-="">导出Excel</button>
 <button onclick="if (!window.__cfRLUnblockHandlers) return false; exportToTxt()" data-cf-modified-be13a96006ed458cd992c942-="">导出TXT</button>
-  <h2 id="result-head" style="visibility:hidden">查询结果</h2>
   <table id="result-table" style="visibility:hidden">
     <thead>
       <tr>
