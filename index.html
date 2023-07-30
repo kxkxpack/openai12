@@ -759,25 +759,25 @@ alert("成功匹配到 API Key，确认后开始查询：" + apiKeys);
     });
 
 
- function exportToExcel() {
-      // 获取表格
-      let table = document.getElementById("result-table");
+function exportToExcel() {
+  // 获取表格
+  let table = document.getElementById("result-table");
 
-      // 创建Workbook对象
-      let wb = XLSX.utils.table_to_book(table);
+  // 创建Workbook对象
+  let wb = XLSX.utils.table_to_book(table);
 
-      // 将Workbook对象转换为Excel文件的二进制数据
-      let wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+  // 将Workbook对象转换为Excel文件的二进制数据
+  let wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
 
-      // 创建Blob对象
-      let blob = new Blob([wbout], { type: 'application/octet-stream' });
+  // 创建Blob对象
+  let blob = new Blob([wbout], { type: 'application/octet-stream' });
 
-      // 创建下载链接并模拟点击下载
-      let a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'api_keys.xlsx';
-      a.click();
-    }
+  // 创建下载链接并模拟点击下载
+  let a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'api_keys.xlsx';
+  a.click();
+}
 
 function exportToTxt() {
   let table = document.getElementById("result-table");
@@ -789,7 +789,16 @@ function exportToTxt() {
   for (let i = 0; i < rows.length; i++) {
     let cells = rows[i].getElementsByTagName("td");
     for (let j = 0; j < cells.length; j++) {
-      txtContent += cells[j].textContent + "\t";
+      let cellContent = cells[j].textContent;
+      let skKeys = cellContent.match(/sk-[A-Za-z0-9]{48}/g);
+      let sessKeys = cellContent.match(/sess-[A-Za-z0-9]{40}/g);
+
+      if (skKeys) {
+        txtContent += skKeys.join("\n") + "\n";
+      }
+      if (sessKeys) {
+        txtContent += sessKeys.join("\n") + "\n";
+      }
     }
     txtContent += "\n";
   }
