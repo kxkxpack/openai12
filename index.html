@@ -792,20 +792,17 @@ function exportToTxt() {
   let tableBody = table.getElementsByTagName("tbody")[0];
   let rows = tableBody.getElementsByTagName("tr");
 
-  let filteredRows = Array.from(rows).filter(row => {
-    let apiKeyCell = row.getElementsByTagName("td")[1];
-    let apiKey = apiKeyCell.textContent.trim();
-    return apiKey.startsWith("sk-") || apiKey.startsWith("sess-");
-  });
-
   let txtContent = "";
 
-  for (let i = 0; i < filteredRows.length; i++) {
-    let cells = filteredRows[i].getElementsByTagName("td");
+  for (let i = 0; i < rows.length; i++) {
+    let cells = rows[i].getElementsByTagName("td");
+    let rowText = "";
     for (let j = 0; j < cells.length; j++) {
-      txtContent += cells[j].textContent + "\t";
+      rowText += cells[j].textContent + "\t";
     }
-    txtContent += "\n";
+    if (rowText.match(/^(sk|sess)-[A-Za-z0-9]+/)) {
+      txtContent += rowText + "\n";
+    }
   }
 
   let blob = new Blob([txtContent], { type: "text/plain" });
@@ -814,6 +811,7 @@ function exportToTxt() {
   a.download = "api_keys.txt";
   a.click();
 }
+
 
   </script>
 
