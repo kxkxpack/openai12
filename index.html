@@ -759,34 +759,49 @@ alert("成功匹配到 API Key，确认后开始查询：" + apiKeys);
 
 
     function exportToExcel() {
-      // 获取表格
-      let table = document.getElementById("result-table");
+  let table = document.getElementById("result-table");
+  let tableBody = table.getElementsByTagName("tbody")[0];
+  let rows = tableBody.getElementsByTagName("tr");
 
-      // 创建Workbook对象
-      let wb = XLSX.utils.table_to_book(table);
+  let filteredRows = Array.from(rows).filter(row => {
+    let apiKeyCell = row.getElementsByTagName("td")[1];
+    let apiKey = apiKeyCell.textContent.trim();
+    return apiKey.startsWith("sk-") || apiKey.startsWith("sess-");
+  });
 
-      // 将Workbook对象转换为Excel文件的二进制数据
-      let wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+  let filteredTable = document.createElement("table");
+  filteredTable.innerHTML = table.innerHTML;
+  let filteredTableBody = filteredTable.getElementsByTagName("tbody")[0];
+  filteredTableBody.innerHTML = "";
 
-      // 创建Blob对象
-      let blob = new Blob([wbout], { type: 'application/octet-stream' });
+  for (let i = 0; i < filteredRows.length; i++) {
+    filteredTableBody.appendChild(filteredRows[i]);
+  }
 
-      // 创建下载链接并模拟点击下载
-      let a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'api_keys.xlsx';
-      a.click();
-    }
+  let wb = XLSX.utils.table_to_book(filteredTable);
+  let wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+  let blob = new Blob([wbout], { type: 'application/octet-stream' });
+  let a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'api_keys.xlsx';
+  a.click();
+}
 
 function exportToTxt() {
   let table = document.getElementById("result-table");
   let tableBody = table.getElementsByTagName("tbody")[0];
   let rows = tableBody.getElementsByTagName("tr");
 
+  let filteredRows = Array.from(rows).filter(row => {
+    let apiKeyCell = row.getElementsByTagName("td")[1];
+    let apiKey = apiKeyCell.textContent.trim();
+    return apiKey.startsWith("sk-") || apiKey.startsWith("sess-");
+  });
+
   let txtContent = "";
 
-  for (let i = 0; i < rows.length; i++) {
-    let cells = rows[i].getElementsByTagName("td");
+  for (let i = 0; i < filteredRows.length; i++) {
+    let cells = filteredRows[i].getElementsByTagName("td");
     for (let j = 0; j < cells.length; j++) {
       txtContent += cells[j].textContent + "\t";
     }
@@ -799,6 +814,7 @@ function exportToTxt() {
   a.download = "api_keys.txt";
   a.click();
 }
+
   </script>
 
 </body>
